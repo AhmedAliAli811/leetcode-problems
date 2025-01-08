@@ -1,11 +1,10 @@
 class Solution {
 public:
-    
-    bool checkSubstring(unordered_map<string, int> wordCount, string s, int wordLen) {
-        for(int j=0; j<s.size(); j+=wordLen) {
-            string w = s.substr(j, wordLen);
-            if(wordCount.find(w) != wordCount.end()) {
-                if(--wordCount[w] == -1) {
+    bool check (unordered_map<string,int> wordcount , string s , int wordlen) {
+        for(int i=0; i<s.size(); i+=wordlen) {
+            string w = s.substr(i, wordlen);
+            if(wordcount.find(w) != wordcount.end()) {
+                if(--wordcount[w] == -1) {
                     return false;
                 }
             } else {
@@ -14,21 +13,17 @@ public:
         }
         return true;
     }
-
     vector<int> findSubstring(string s, vector<string>& words) {
         vector<int> res;
-        int wordLen = words[0].size();
-        int sLen = s.size();
-        int wordsWindow = words.size() * wordLen;
-        
-        unordered_map<string, int> wordCount;
-        for(int i=0; i<words.size(); i++) {
-            wordCount[words[i]]++;
+        unordered_map<string, int> m;
+        for (string word : words) {
+            m[word]++;
         }
-        
+        int wordlen = words[0].size();
+        int sliding_window = words.size() * wordlen;
         int i = 0;
-        while(i + wordsWindow <= sLen) {
-            if(checkSubstring(wordCount, s.substr(i, wordsWindow), wordLen)) {
+        while (i + sliding_window <= s.size()) {
+            if (check(m, s.substr(i , sliding_window), wordlen)) {
                 res.push_back(i);
             }
             i++;
