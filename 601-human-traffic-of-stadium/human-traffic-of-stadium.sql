@@ -1,21 +1,4 @@
 /* Write your T-SQL query statement below */
-/*with Counts as (
-    select * , case when people >= 100 then 1 else -1 end as 'over_100'
-    from Stadium 
-),
-PrefixSum as (
-    select * , SUM(over_100) OVER (ORDER BY id) AS Prefix  
-    from Counts
-),
-FinalRow as (
-    select Top 1 *
-    from PrefixSum 
-    where Prefix >=3
-    order by Prefix desc
-)
-select s.* from Stadium s 
-join FinalRow FR on FR.id - s.id >=0 and FR.id - s.id <= FR.Prefix - 1 
-order by s.id */
 with counts as (
     select id, visit_date, people,
            case 
