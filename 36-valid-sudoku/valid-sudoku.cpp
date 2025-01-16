@@ -14,10 +14,7 @@ public:
     }
     bool isValidSudoku(vector<vector<char>>& board) {
         for (vector<char> v : board) {
-            if (check_valid(v)) {
-                continue;
-            }
-            else {
+            if (!check_valid(v)) {
                 return false;
             }
         }
@@ -27,10 +24,7 @@ public:
             for (int i = 0; i < n; ++i) {
                 column.push_back(board[i][j]);
             }
-            if (check_valid(column)) {
-                continue;
-            }
-            else {
+            if (!check_valid(column)) {
                 return false;
             }
         }
@@ -42,10 +36,7 @@ public:
                         square.push_back(board[i+k][j+l]);
                     }
                 }
-                if (check_valid(square)) {
-                    continue;
-                }
-                else {
+                if (!check_valid(square)) {
                     return false;
                 }
             }
