@@ -1,11 +1,26 @@
-/* Write your T-SQL query statement below */
-select pi1.category as category1    , pi2.category    as category2 , count(distinct pp1.user_id) as customer_count 
-from ProductPurchases pp1 
-join ProductPurchases pp2 on pp1.user_id = pp2.user_id
-join ProductInfo pi1 on pp1.product_id = pi1.product_id 
-join ProductInfo pi2 on pp2.product_id = pi2.product_id
-where pi1.category < pi2.category
-group by pi1.category , pi2.category    
-having  count(distinct pp1.user_id) >= 3
-
-order by customer_count desc , category1 , category2
+WITH user_categories AS (
+    SELECT DISTINCT
+           pp.user_id,
+           pi.category
+    FROM ProductPurchases pp
+    JOIN ProductInfo pi 
+      ON pp.product_id = pi.product_id
+),
+category_pairs AS (
+    SELECT
+        uc1.user_id,
+        uc1.category AS category1,
+        uc2.category AS category2
+    FROM user_categories uc1
+    JOIN user_categories uc2
+      ON uc1.user_id = uc2.user_id
+     AND uc1.category < uc2.category
+)
+SELECT
+    category1,
+    category2,
+    COUNT(user_id) AS customer_count
+FROM category_pairs
+GROUP BY category1, category2
+HAVING COUNT(user_id) >= 3
+ORDER BY customer_count DESC, category1, category2;
